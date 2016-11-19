@@ -18,7 +18,7 @@ LIB = libft/libft.a
 
 SRC = main.c builtins.c\
 
-GCC = gcc -o $(NAME) -Wall -Wextra -Werror
+GCC = gcc -o $(NAME) -Wall -Wextra -Werror -I/usr/include/
 
 all: $(NAME)
 
