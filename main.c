@@ -1,14 +1,16 @@
 #include "minishell.h"
 
-char **getpath(char **env)
+char *get_env(char **env, char *key)
 {
 	int i;
+	int len;
 	
 	i = -1;
+	len = ft_strlen(key);
 	while (env[++i])
 	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
-			return (ft_strsplit(env[i] + 5, ':'));
+		if (ft_strncmp(env[i], key, len) == 0)
+			return (env[i] + len);
 	}
 	return (NULL);
 }
@@ -46,8 +48,10 @@ void exe_com(char *name, char **arg, char **env)
 {
 	pid_t pid;
 
+	printf("%s\n", name);
+
 	if (name[0] != '/')
-		exec_builtins(name);
+		exec_builtins(name, arg, env);
 	else
 	{
 		pid = fork();
@@ -67,16 +71,20 @@ int main(int ac, char **ag, char **env)
 {
 	char *line;
 	char **ltab;
+	char **path;
 
+	ac = ac;
+	ag = ag;
+	path = ft_strsplit(get_env(env, "PATH="), ':');
 	ft_putstr("#>");
-	while (get_next_line(0, &line))
+	while (get_next_line(0, &line) && line)
 	{
-		ltab = ft_strsplit(line, ' ');
-		if (!(line = check(getpath(env), ltab[0])))
-			printf("la commande n'existe pas\n");
-		else 
-			exe_com(line, ltab, env);
-		ft_putstr("#>");
+			ltab = ft_strsplit(line, ' ');
+			if (!(line = check(path, ltab[0])))
+				printf("la commande n'existe pas\n");
+			else 
+				exe_com(line, ltab, env);
+			ft_putstr("#>");
 	}
 	return 0;
 }

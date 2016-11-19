@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/ * ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
@@ -17,34 +17,69 @@ int		check_builtins(char *name)
 	char *builtins;
 
 	builtins = "cd;unsetenv;setenv;exit";
-	if (ptr = ft_strstr(builtins, name) && name)
+	if (ft_strstr(builtins, name) && name)
 		return (1);
 	return (0);
 }
 
-void	exec_builtins(char *name)
+void	exec_builtins(char *name, char **arg, char **env)
 {
-	if (name == "cd")
-		cd();
-	if (name == "setenv")
-		ft_setenv();
-	if (name == "unsetenv")
-		ft_unsetenv();
-	if (name == "exit")
+	if (!(ft_strcmp(name, "cd")))
+		cd(arg, env);
+	if (!(ft_strcmp(name, "setenv")))
+		ft_setenv(arg, env);
+	if (!(ft_strcmp(name, "unsetenv")))
+		ft_unsetenv(arg, env);
+	if (!(ft_strcmp(name, "exit")))
 		exit(2);
 }
 
-void cd()
+void cd(char **arg, char **env)
 {
-	ft_putstr("cddddddddd");
+ 	if (arg[1] == NULL)
+	{
+		if (!chdir(get_env(env, "HOME=")))
+		{
+			ft_strcpy(get_env(env, "OLDPWD="), get_env(env, "PWD="));
+			ft_strcpy(get_env(env, "PWD="), get_env(env, "HOME="));
+		}
+		else 
+			printf("impossible mamene");
+	}
+	else
+	{
+		if (!chdir(arg[1]))
+		{
+			ft_strcpy(get_env(env, "OLDPWD="), get_env(env, "PWD="));
+			ft_strcpy(get_env(env, "PWD="), arg[1]);
+		}
+		else
+			printf("impossible mamene");
+	}
 }
 
-void ft_setenv()
+void ft_setenv(char **arg, char **env)
 {
+	int i;
+	int j;
+	char **nenv;
+
+	i = 0;
+	j = 0;
+	while (env[i])
+		i++;
+	if (!(nenv = (char **)malloc((i + 1) * sizeof(char *))))
+		exit(2);
+	bzero(nenv, (i + 1) * sizeof(char *));
+	while 
+	
+ env = env;
 	ft_putstr("setennnnnnnnvvvee");
 }
 
-void ft_unsetenv()
+void ft_unsetenv(char **arg, char **env)
 {
+ arg = arg;
+ env = env;
 	ft_putstr("unsetenvvvvv");
 }
