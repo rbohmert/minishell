@@ -1,37 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/11/20 19:09:49 by rbohmert          #+#    #+#             */
+/*   Updated: 2016/11/27 18:41:47 by rbohmert         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char *get_env(char **env, char *key)
-{
-	int i;
-	int len;
-	
-	i = -1;
-	len = ft_strlen(key);
-	while (env[++i])
-	{
-		if (ft_strncmp(env[i], key, len) == 0)
-			return (env[i] + len);
-	}
-	return (NULL);
-}
-
-char *join_path(char *s1, char *s2)
-{
-	char *s;
-
-	s = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 2);
-	ft_strcpy(s, s1);
-	ft_strcat(s, "/");
-	ft_strcat(s, s2);
-	return (s);
-}
-	
-char *check(char **dir, char *name)
+char *check(char **env, char *name)
 {
 	int i;
 	char *path;
+	char **dir;
 
 	i = -1;
+	if (check_builtins(name))
+		return (name);
+	dir = ft_strsplit(get_env(env, "PATH="), ':');
 	while (dir[++i])
 	{
 		path = join_path(dir[i], name);
@@ -39,16 +29,12 @@ char *check(char **dir, char *name)
 			return (path);
 		free(path);
 	}
-	if (check_builtins(name))
-		return (name);
 	return (NULL);
 }
 
 void exe_com(char *name, char **arg, char **env)
 {
 	pid_t pid;
-
-	printf("%s\n", name);
 
 	if (name[0] != '/')
 		exec_builtins(name, arg, env);
@@ -67,24 +53,36 @@ void exe_com(char *name, char **arg, char **env)
 		return ;
 	}
 }
-int main(int ac, char **ag, char **env)
+
+void verif_line(char *str, char **env)
+{
+	char **ltab;
+
+	if (str[0])
+	{	
+		ltab = ft_strsplit(str, ' ');
+		if (!(str = check(env, ltab[0])))
+			printf("la commande n'existe pas\n");
+		else 
+			exe_com(str, ltab, env);
+	}
+}
+
+int main(int ac, char **av, char **env)
 {
 	char *line;
-	char **ltab;
-	char **path;
+	char **com_tab;
+	int i;
 
-	ac = ac;
-	ag = ag;
-	path = ft_strsplit(get_env(env, "PATH="), ':');
+	i = 0 * (int)(av[ac]);
 	ft_putstr("#>");
 	while (get_next_line(0, &line) && line)
 	{
-			ltab = ft_strsplit(line, ' ');
-			if (!(line = check(path, ltab[0])))
-				printf("la commande n'existe pas\n");
-			else 
-				exe_com(line, ltab, env);
-			ft_putstr("#>");
+		strtrim(&line);
+		com_tab = ft_strsplit(line, ';');
+		while (com_tab[i])
+			verif_line(com_tab[i++], env);
+		ft_putstr("#>");
 	}
 	return 0;
 }

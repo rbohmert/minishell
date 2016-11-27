@@ -6,7 +6,7 @@
 #    By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/27 11:23:48 by rbohmert          #+#    #+#              #
-#    Updated: 2015/12/17 15:06:23 by rbohmert         ###   ########.fr        #
+#    Updated: 2016/11/20 22:10:06 by rbohmert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = minishell
 
 LIB = libft/libft.a
 
-SRC = main.c builtins.c\
+SRC = main.c builtins.c utils.c env.c\
 
 GCC = gcc -o $(NAME) -Wall -Wextra -Werror -I/usr/include/
 
