@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 19:09:49 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/11/27 19:52:17 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/11/27 20:16:16 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@ char *check(char **env, char *name)
 		return (name);
 	if (!access(name, F_OK))
 		return (name);
-	dir = ft_strsplit(get_env(env, "PATH="), ':');
-	while (dir[++i])
+	if (get_env(env, "PATH="))
+		dir = ft_strsplit(get_env(env, "PATH="), ':');
+	else
+		dir = NULL;
+	while (dir && dir[++i])
 	{
 		path = join_path(dir[i], name);
 		if (!access(path, F_OK))
