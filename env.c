@@ -1,0 +1,90 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/11/20 22:02:48 by rbohmert          #+#    #+#             */
+/*   Updated: 2016/11/23 02:13:19 by rbohmert         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+char 	**cp_env(char **env)
+{
+	int i;
+	char **nenv;
+
+	i = 0;
+	while (env[i])
+		i++;
+	nenv = (char **)malloc((i + 10) * sizeof(char *));
+	i = 0;
+	while (env[i])
+	{
+		nenv[i] = env[i];
+		i++;
+	}
+	nenv[i] = NULL;
+	return (nenv);
+}
+
+void	clr_env(char **nenv)
+{
+	int i;
+
+	i = 0;
+	while (nenv[i])
+	{
+		i++;
+		nenv[i - 1] = NULL;
+	}
+
+}
+
+void	add_key(char *str, char **nenv)
+{
+	int i;
+
+	i = 0;
+	while (nenv[i])
+		i++;
+	nenv[i] = ft_strdup(str);
+	nenv[i + 1] = NULL;
+}
+
+void env_opt(char **arg, char **nenv, int *i)
+{
+	while (arg[*i] && arg[*i][0] == '-')
+	{
+		if (arg[*i][1] == 'i' && arg[*i][2] == 0)
+			clr_env(nenv);
+		else if (arg[*i][1] == 'u' && arg[*i][2] == 0 && arg[*i + 1])
+			ft_unsetenv(arg + (*i)++, nenv);
+		else 
+			ft_putstr("usage env [-i] [-u name] [utility [arguments ...]]\n");
+		(*i)++;
+	}
+	while (arg[*i] && ft_strchr(arg[*i], '='))
+		add_key(arg[(*i)++], nenv);
+}
+
+void ft_env(char **arg, char **env)
+{
+	int i;
+	char **nenv;
+	char *com;
+
+	i = 1;
+	nenv = cp_env(env);
+	env_opt(arg, nenv, &i);
+	if (arg[i] && (com = check(env, arg[i])))
+		exe_com(com, arg + i, nenv);
+	else if (!arg[i])
+		ptabstr(nenv);//ft_putstr("iloliusage env [-i] [-u name] [utility [arguments ...]]\n");
+	else	
+		printf("env: %s: commande introuvable", arg[i]);
+	free(nenv);
+}
