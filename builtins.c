@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/21 22:39:24 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/11/22 21:54:39 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/11/27 19:32:15 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void cd(char **arg, char **env)
 			ft_strcpy(get_env(env, "PWD="), get_env(env, "HOME="));
 		}
 		else 
-			printf("impossible mamene");
+			printf("impossible mamene\n");
 	}
 	else
 	{
@@ -46,7 +46,7 @@ void cd(char **arg, char **env)
 			ft_strcpy(get_env(env, "PWD="), arg[1]);
 		}
 		else
-			printf("impossible mamene");
+			printf("impossible mamene\n");
 	}
 }
 

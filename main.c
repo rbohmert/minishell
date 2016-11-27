@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 19:09:49 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/11/27 19:22:05 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/11/27 19:52:17 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char *check(char **env, char *name)
 
 	i = -1;
 	if (check_builtins(name))
+		return (name);
+	if (!access(name, F_OK))
 		return (name);
 	dir = ft_strsplit(get_env(env, "PATH="), ':');
 	while (dir[++i])
@@ -36,13 +38,14 @@ void exe_com(char *name, char **arg, char **env)
 {
 	pid_t pid;
 
-	if (name[0] != '/')
+	printf("%s\n", name);
+	if (name[0] != '/' && name[0] != '.')
 		exec_builtins(name, arg, env);
 	else
 	{
 		pid = fork();
 		if (pid < 0)
-			printf("fork fail \n");
+			printf("fork fail\n");
 		else if (pid == 0)
 		{
 			execve(name, arg, env);
@@ -75,6 +78,7 @@ int main(int ac, char **av, char **env)
 	int i;
 
 	i = 0 * (int)(av[ac]);
+	ft_putstr("#>");
 	while (get_next_line(0, &line) && line)
 	{
 		strtrim(&line);
