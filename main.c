@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 19:09:49 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/11/27 20:16:16 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/11/27 20:17:56 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void exe_com(char *name, char **arg, char **env)
 {
 	pid_t pid;
 
-	printf("%s\n", name);
 	if (name[0] != '/' && name[0] != '.')
 		exec_builtins(name, arg, env);
 	else
