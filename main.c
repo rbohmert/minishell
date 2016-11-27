@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 19:09:49 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/11/27 18:41:47 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/11/27 19:22:05 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,14 @@ int main(int ac, char **av, char **env)
 	int i;
 
 	i = 0 * (int)(av[ac]);
-	ft_putstr("#>");
 	while (get_next_line(0, &line) && line)
 	{
 		strtrim(&line);
 		com_tab = ft_strsplit(line, ';');
 		while (com_tab[i])
 			verif_line(com_tab[i++], env);
+		free(com_tab);
+		i = 0;
 		ft_putstr("#>");
 	}
 	return 0;
