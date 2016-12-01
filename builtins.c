@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/21 22:39:24 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/11/27 19:32:15 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/12/01 07:48:10 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	exec_builtins(char *name, char **arg, char **env)
 {
 	if (!(ft_strcmp(name, "cd")))
 		cd(arg, env);
+	if (!(ft_strcmp(name, "echo")))
+		echo(arg);
 	if (!(ft_strcmp(name, "env")))
 		ft_env(arg, env);
 	if (!(ft_strcmp(name, "setenv")))
@@ -26,68 +28,38 @@ void	exec_builtins(char *name, char **arg, char **env)
 		exit(2);
 }
 
-void cd(char **arg, char **env)
+void	ft_chdir(char *target, char *oldpwd, char **env)
 {
- 	if (arg[1] == NULL)
+	char buf[200];
+
+	if (!chdir(target))
 	{
-		if (!chdir(get_env(env, "HOME=")))
-		{
-			ft_strcpy(get_env(env, "OLDPWD="), get_env(env, "PWD="));
-			ft_strcpy(get_env(env, "PWD="), get_env(env, "HOME="));
-		}
-		else 
-			printf("impossible mamene\n");
+		getcwd(buf, 200);
+		if (get_env(env, "OLDPWD="))
+			ft_strcpy(get_env(env, "OLDPWD="), oldpwd);
+		if (get_env(env, "PWD="))
+			ft_strcpy(get_env(env, "PWD="), buf);
 	}
 	else
+		ft_putstr("impossible\n");
+}
+
+void	cd(char **arg, char **env)
+{
+	if (arg[2])
+		ft_putstr("Too many arguments\n");
+	else
 	{
-		if (!chdir(arg[1]))
-		{
-			ft_strcpy(get_env(env, "OLDPWD="), get_env(env, "PWD="));
-			ft_strcpy(get_env(env, "PWD="), arg[1]);
-		}
+		if (arg[1] == NULL || arg[1][0] == '~')
+			ft_chdir(get_env(env, "HOME="), get_env(env, "PWD="), env);
+		else if (arg[1][0] == '-')
+			ft_chdir(get_env(env, "OLDPWD="), get_env(env, "PWD="), env);
 		else
-			printf("impossible mamene\n");
+			ft_chdir(arg[1], get_env(env, "PWD="), env);
 	}
 }
 
-void	add_env(char **arg, char **env, int ac)
-{
-	int i;
-
-	i = 0;
-	while (env[i])
-		i++;
-	if (ac == 2)
-		env[i] = ft_strjoin(arg[1], "=");
-	else
-		env[i] = ft_strjoin(ft_strjoin(arg[1], "="), arg[2]);
-	env[i+1] = NULL;
-}
-
-void ft_setenv(char **arg, char **env)
-{
-	int ac;
-	char *str;
-
-	ac = 0;
-	while (arg[ac])
-		ac++;
-	if (ac == 1)
-		ptabstr(env);
-	else if (ac > 3)
-		ft_putendl("usage setenv: setnenv VAR VALUE");
-	else
-	{
-		if (!(str = get_env(env, ft_strjoin(arg[1], "="))))
-			add_env(arg, env, ac);
-		else if (ac == 2)
-			str[0] = 0;
-		else
-			ft_strcpy(str, arg[2]);
-	}
-}
-
-void ft_unsetenv(char **arg, char **env)
+void	ft_unsetenv(char **arg, char **env)
 {
 	int ac;
 	int i;
@@ -97,7 +69,7 @@ void ft_unsetenv(char **arg, char **env)
 	while (arg[ac])
 		ac++;
 	if (ac == 1)
-		ptabstr(env);
+		ft_ptabstr(env);
 	if (ac == 2 || !ft_strcmp(arg[0], "-u"))
 	{
 		while (env[i])
@@ -111,5 +83,16 @@ void ft_unsetenv(char **arg, char **env)
 			}
 			i++;
 		}
+	}
+}
+
+void	echo(char **arg)
+{
+	arg++;
+	while (*arg)
+	{
+		ft_putstr(*arg);
+		(*(arg + 1)) ? ft_putchar(' ') : ft_putchar('\n');
+		arg++;
 	}
 }

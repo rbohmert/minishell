@@ -6,16 +6,16 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 22:02:48 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/11/23 02:13:19 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/12/01 07:48:09 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char 	**cp_env(char **env)
+char	**cp_env(char **env)
 {
-	int i;
-	char **nenv;
+	int		i;
+	char	**nenv;
 
 	i = 0;
 	while (env[i])
@@ -41,7 +41,6 @@ void	clr_env(char **nenv)
 		i++;
 		nenv[i - 1] = NULL;
 	}
-
 }
 
 void	add_key(char *str, char **nenv)
@@ -55,7 +54,7 @@ void	add_key(char *str, char **nenv)
 	nenv[i + 1] = NULL;
 }
 
-void env_opt(char **arg, char **nenv, int *i)
+void	env_opt(char **arg, char **nenv, int *i)
 {
 	while (arg[*i] && arg[*i][0] == '-')
 	{
@@ -63,7 +62,7 @@ void env_opt(char **arg, char **nenv, int *i)
 			clr_env(nenv);
 		else if (arg[*i][1] == 'u' && arg[*i][2] == 0 && arg[*i + 1])
 			ft_unsetenv(arg + (*i)++, nenv);
-		else 
+		else
 			ft_putstr("usage env [-i] [-u name] [utility [arguments ...]]\n");
 		(*i)++;
 	}
@@ -71,20 +70,24 @@ void env_opt(char **arg, char **nenv, int *i)
 		add_key(arg[(*i)++], nenv);
 }
 
-void ft_env(char **arg, char **env)
+void	ft_env(char **arg, char **env)
 {
-	int i;
-	char **nenv;
-	char *com;
+	int		i;
+	char	**nenv;
+	char	*com;
 
 	i = 1;
 	nenv = cp_env(env);
 	env_opt(arg, nenv, &i);
-	if (arg[i] && (com = check(env, arg[i])))
+	if (arg[i] && (com = check(env, arg[i], 1)))
 		exe_com(com, arg + i, nenv);
 	else if (!arg[i])
-		ptabstr(nenv);//ft_putstr("iloliusage env [-i] [-u name] [utility [arguments ...]]\n");
-	else	
-		printf("env: %s: commande introuvable", arg[i]);
+		ft_ptabstr(nenv);
+	else
+	{
+		ft_putstr("env: ");
+		ft_putstr(arg[i]);
+		ft_putstr(": commande introuvable\n");
+	}
 	free(nenv);
 }

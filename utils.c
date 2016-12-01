@@ -6,13 +6,13 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 18:59:56 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/11/27 18:26:57 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/12/01 07:48:11 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void strtrim(char **str)
+void	strtrim(char **str)
 {
 	char *tmp;
 	char *nstr;
@@ -27,7 +27,8 @@ void strtrim(char **str)
 	{
 		if (*tmp != '\t' && *tmp != '\v' && *tmp != ' ')
 			*(nstr++) = *tmp;
-		else if (*(tmp + 1) && (*(tmp + 1) != '\t' && *(tmp + 1) != '\v' && *(tmp + 1) != ' '))
+		else if (*(tmp + 1) && (*(tmp + 1) != '\t' &&\
+				*(tmp + 1) != '\v' && *(tmp + 1) != ' '))
 			*(nstr++) = ' ';
 		tmp++;
 	}
@@ -38,9 +39,16 @@ void strtrim(char **str)
 
 int		check_builtins(char *name)
 {
-	char	*builtins[] = {"cd", "env", "unsetenv", "setenv", "exit", NULL};
+	char	*builtins[7];
 	int		i;
-	
+
+	builtins[0] = "echo";
+	builtins[1] = "cd";
+	builtins[2] = "env";
+	builtins[3] = "setenv";
+	builtins[4] = "unsetenv";
+	builtins[5] = "exit";
+	builtins[6] = "NULL";
 	i = 0;
 	while (builtins[i])
 	{
@@ -51,13 +59,7 @@ int		check_builtins(char *name)
 	return (0);
 }
 
-void ptabstr(char **str)
-{
-	while (*str)
-		ft_putendl(*(str++));
-}
-
-char *get_env(char **env, char *key)
+char	*get_env(char **env, char *key)
 {
 	int i;
 	int len;
@@ -72,7 +74,7 @@ char *get_env(char **env, char *key)
 	return (NULL);
 }
 
-char *join_path(char *s1, char *s2)
+char	*join_path(char *s1, char *s2)
 {
 	char *s;
 
