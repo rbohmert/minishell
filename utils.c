@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 18:59:56 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/12/01 07:48:11 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/12/03 21:05:44 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		check_builtins(char *name)
 	builtins[3] = "setenv";
 	builtins[4] = "unsetenv";
 	builtins[5] = "exit";
-	builtins[6] = "NULL";
+	builtins[6] = NULL;
 	i = 0;
 	while (builtins[i])
 	{

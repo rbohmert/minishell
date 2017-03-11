@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 19:09:58 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/12/01 07:48:08 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/12/03 21:05:42 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <sys/types.h>
+# include <sys/stat.h>
 # include <sys/wait.h>
 # include "libft/get_next_line.h"
 

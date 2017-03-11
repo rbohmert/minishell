@@ -6,7 +6,7 @@
 /*   By: rbohmert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/21 22:39:24 by rbohmert          #+#    #+#             */
-/*   Updated: 2016/12/01 07:48:10 by rbohmert         ###   ########.fr       */
+/*   Updated: 2016/12/03 21:05:41 by rbohmert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,21 @@ void	ft_chdir(char *target, char *oldpwd, char **env)
 			ft_strcpy(get_env(env, "PWD="), buf);
 	}
 	else
-		ft_putstr("impossible\n");
+		ft_putstr("File not exist or no access right\n");
 }
 
 void	cd(char **arg, char **env)
 {
-	if (arg[2])
+	int		i;
+
+	i = 0;
+	while (arg[i])
+		i++;
+	if (i > 2)
 		ft_putstr("Too many arguments\n");
 	else
 	{
-		if (arg[1] == NULL || arg[1][0] == '~')
+		if (arg[1] == NULL)
 			ft_chdir(get_env(env, "HOME="), get_env(env, "PWD="), env);
 		else if (arg[1][0] == '-')
 			ft_chdir(get_env(env, "OLDPWD="), get_env(env, "PWD="), env);
